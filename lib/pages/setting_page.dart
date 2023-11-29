@@ -17,10 +17,10 @@ class SettingPage extends StatelessWidget {
           title: Text('Temperature Unit'),
           subtitle: Text('℃ / ℉'),
           trailing: Switch(
-            value: context.watch<TempSettingsProvider>().state.tempUnit ==
-                    TempUnit.celcius
-                ? true
-                : false,
+            value:
+                context.watch<TempSettingState>().tempUnit == TempUnit.celcius
+                    ? true
+                    : false,
             onChanged: (_) {
               context.read<TempSettingsProvider>().toggleTempUnit();
             },

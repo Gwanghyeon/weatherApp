@@ -1,18 +1,19 @@
-import 'package:weather_app/const/constants.dart';
+import 'package:state_notifier/state_notifier.dart';
 import 'package:weather_app/providers/providers.dart';
 
 part 'theme_state.dart';
 
-class ThemeProvider {
-  final WeatherProvider weatherProvider;
+class ThemeProvider extends StateNotifier<ThemeState> with LocatorMixin {
+  ThemeProvider() : super(ThemeState.initial());
 
-  ThemeProvider({required this.weatherProvider});
-
-  ThemeState get state {
-    if (weatherProvider.state.weather.temp > cWarmOrNot) {
-      return ThemeState();
+  @override
+  void update(Locator watch) {
+    final weather = watch<WeatherState>().weather;
+    if (weather.temp > 20) {
+      state = state.copyWith(appTheme: AppTheme.light);
     } else {
-      return ThemeState(appTheme: AppTheme.dark);
+      state = state.copyWith(appTheme: AppTheme.dark);
     }
+    super.update(watch);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:weather_app/pages/home_page.dart';
@@ -27,22 +28,18 @@ class MyApp extends StatelessWidget {
               weatherApiServices:
                   WeatherApiServices(httpClient: http.Client())),
         ),
-        ChangeNotifierProvider<WeatherProvider>(
-          create: (context) => WeatherProvider(
-              weatherRepository: context.read<WeatherRepository>()),
+        StateNotifierProvider<WeatherProvider, WeatherState>(
+          create: (context) => WeatherProvider(),
         ),
-        ChangeNotifierProvider<TempSettingsProvider>(
-          create: (context) => TempSettingsProvider(),
+        StateNotifierProvider<TempSettingsProvider, TempSettingState>(
+            create: (context) => TempSettingsProvider()),
+        StateNotifierProvider<ThemeProvider, ThemeState>(
+          create: (context) => ThemeProvider(),
         ),
-        // ThemeProvider : 다른 Provider 의 값에만 의존, 자체 액션이 없음
-        // * Using ProxyProvider instead of changeNotifierProxyProvider
-        ProxyProvider<WeatherProvider, ThemeProvider>(
-            update: (context, weatherProvider, _) =>
-                ThemeProvider(weatherProvider: weatherProvider))
       ],
       builder: (context, _) => MaterialApp(
         title: 'Flutter Demo',
-        theme: context.watch<ThemeProvider>().state.appTheme == AppTheme.light
+        theme: context.watch<ThemeState>().appTheme == AppTheme.light
             ? ThemeData.light(useMaterial3: true)
             : ThemeData.dark(),
         home: const HomePage(),

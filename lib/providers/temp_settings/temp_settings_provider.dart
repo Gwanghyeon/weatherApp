@@ -1,17 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 
 part 'temp_settings_state.dart';
 
-class TempSettingsProvider with ChangeNotifier {
-  TempSettingState _state = TempSettingState.initial();
-  // state Getter : 외부에서 state에 접근할 수 있도록 설정
-  TempSettingState get state => _state;
+class TempSettingsProvider extends StateNotifier<TempSettingState> {
+  TempSettingsProvider() : super(TempSettingState.initial());
 
   void toggleTempUnit() {
-    _state = _state.copyWith(
-        tempUnit: _state.tempUnit == TempUnit.celcius
+    state = state.copyWith(
+        tempUnit: state.tempUnit == TempUnit.celcius
             ? TempUnit.fahrenheit
             : TempUnit.celcius);
-    notifyListeners();
   }
 }

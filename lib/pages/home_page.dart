@@ -19,24 +19,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? _city;
-  late WeatherProvider weatherProvider;
+  late final WeatherProvider weatherProvider;
+  // addListener 에서 반환된 함수를 호출하여 remove 가능
+  late final void Function() _removeListener;
 
   @override
   void initState() {
     super.initState();
     weatherProvider = context.read<WeatherProvider>();
-    weatherProvider.addListener(_weatherProviderListener);
+    _removeListener = weatherProvider.addListener(_registerListener);
+    weatherProvider.addListener(_registerListener);
   }
 
   @override
   void dispose() {
-    weatherProvider.removeListener(_weatherProviderListener);
+    _removeListener();
     super.dispose();
   }
 
-  void _weatherProviderListener() {
-    final weatherState = context.read<WeatherProvider>().state;
-
+  void _registerListener(WeatherState weatherState) {
     if (weatherState.status == WeatherStatus.error) {
       errorDialog(context, weatherState.customError.errMsg);
     }
@@ -86,10 +87,10 @@ class _HomePageState extends State<HomePage> {
 @swidget
 // Body: 도시이름, 온도, 그래픽 표현
 Widget showWeather(BuildContext context) {
-  final state = context.watch<WeatherProvider>().state;
+  final state = context.watch<WeatherState>();
   // 온도 표시 with ℃
   String _showTemperature(double temperature) {
-    final tempUnit = context.watch<TempSettingsProvider>().state.tempUnit;
+    final tempUnit = context.watch<TempSettingState>().tempUnit;
 
     // 화씨 온도 표시
     if (tempUnit == TempUnit.fahrenheit) {
