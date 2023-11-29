@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:weather_app/const/constants.dart';
-import 'package:weather_app/exceptions/weather_exception.dart';
-import 'package:weather_app/models/direct_geocoding.dart';
-import 'package:weather_app/models/weather.dart';
-import 'package:weather_app/services/http_error_handler.dart';
+
+import '../const/constants.dart';
+import '../exceptions/weather_exception.dart';
+import '../models/direct_geocoding.dart';
+import '../models/weather.dart';
+import 'http_error_handler.dart';
 
 class WeatherApiServices {
   final http.Client httpClient;
@@ -33,6 +34,7 @@ class WeatherApiServices {
 
       // 오류 발생시 에러 처리: 별도 함수
       if (response.statusCode != 200) {
+        print('error in Status code');
         throw Exception(httpErrorHandler(response));
       }
 
@@ -41,7 +43,8 @@ class WeatherApiServices {
       // 받아온 정보가 비어있는 경우
       if (responseBody.isEmpty) {
         // Custom Exception 클래스 throw
-        throw WeatherException('Cannot get the location of $city');
+        print('error with Empty body');
+        throw WeatherException(errMsg: 'Cannot get the location of $city');
       }
 
       // 오류가 없을 경우 DirectGeocoding 객체 반환

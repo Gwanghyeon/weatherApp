@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
-import 'package:weather_app/const/constants.dart';
-import 'package:weather_app/pages/search_page.dart';
-import 'package:weather_app/pages/setting_page.dart';
-import 'package:weather_app/providers/providers.dart';
-import 'package:weather_app/widgets/error_dialog.dart';
+
+import '../const/constants.dart';
+import '../providers/providers.dart';
+import '../widgets/error_dialog.dart';
+import 'search_page.dart';
+import 'setting_page.dart';
 
 part '../.generated/pages/home_page.g.dart';
 
