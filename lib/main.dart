@@ -34,11 +34,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<TempSettingsProvider>(
           create: (context) => TempSettingsProvider(),
         ),
-        ChangeNotifierProxyProvider<WeatherProvider, ThemeProvider>(
-          create: (context) => ThemeProvider(),
-          update: (context, weatherProvider, themeProvider) =>
-              themeProvider!..update(weatherProvider),
-        ),
+        // ThemeProvider : 다른 Provider 의 값에만 의존, 자체 액션이 없음
+        // * Using ProxyProvider instead of changeNotifierProxyProvider
+        ProxyProvider<WeatherProvider, ThemeProvider>(
+            update: (context, weatherProvider, _) =>
+                ThemeProvider(weatherProvider: weatherProvider))
       ],
       builder: (context, _) => MaterialApp(
         title: 'Flutter Demo',
